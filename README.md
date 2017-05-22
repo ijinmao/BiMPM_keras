@@ -1,6 +1,16 @@
 # BiMPM_keras
 Keras implementation of Bilateral Multi-Perspective Matching [1] using in [Quora Question Duplicate Pairs Competition](https://www.kaggle.com/c/quora-question-pairs). You can find the original tensorflow implementation by its author [here](https://github.com/zhiguowang/BiMPM). 
 
+## Description
+
+`bimpm.py` - model graph.
+
+`multi_perspective.py` - multi perspective layer.
+
+`config.py` - hyper-parameters.
+
+`layers.py` - other layers, word embedding layers, context layer, etc.
+
 ## Requirements
 
 - python 2.7
