@@ -3,15 +3,15 @@ Keras implementation of Bilateral Multi-Perspective Matching [1] using in [Quora
 
 ## Description
 
+`models/bimpm.py` - model graph.
+
+`models/multi_perspective.py` - multi perspective matching layer.
+
+`models/layers.py` - other layers, word embedding layers, context layer, etc.
+
 `train_model.py` - train and test BiMPM model.
 
-`bimpm.py` - model graph.
-
-`multi_perspective.py` - multi perspective matching layer.
-
 `config.py` - hyper-parameters.
-
-`layers.py` - other layers, word embedding layers, context layer, etc.
 
 If you find any bugs, please create an issue, thanks.
 
