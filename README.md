@@ -13,10 +13,6 @@ Keras implementation of Bilateral Multi-Perspective Matching [1] using in [Quora
 
 `layers.py` - other layers, word embedding layers, context layer, etc.
 
-
-
-
-
 If you find any bugs, please create an issue, thanks.
 
 ## Requirements

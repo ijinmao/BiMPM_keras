@@ -1,7 +1,7 @@
 import numpy as np
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import KFold
-from bimpm import build_model as build_bimpm
+from models.bimpm import build_model as build_bimpm
 from config import (
     DirConfig, TrainConfig, TestConfig, BiMPMConfig
 )

@@ -12,8 +12,8 @@ import keras.backend as K
 from config import (
     BiMPMConfig, TrainConfig
 )
-from multi_perspective import MultiPerspective
-from layers import (
+from model.smulti_perspective import MultiPerspective
+from models.layers import (
     WordRepresLayer, CharRepresLayer, ContextLayer, PredictLayer
 )
 

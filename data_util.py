@@ -162,8 +162,7 @@ def get_char_seq(train_ori1, train_ori2, test_ori1, test_ori2):
     return train_s1, train_s2, test_s1, test_s2, char_index
 
 
-# The function "text_to_wordlist" is from
-# https://www.kaggle.com/currie32/quora-question-pairs/the-importance-of-cleaning-text
+# from https://www.kaggle.com/currie32/quora-question-pairs/the-importance-of-cleaning-text
 def text_to_wordlist(text, remove_stopwords=False, stem_words=False):    
     # Convert words to lower case and split them
     text = str(text).lower().split()
