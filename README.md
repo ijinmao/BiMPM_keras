@@ -3,6 +3,8 @@ Keras implementation of Bilateral Multi-Perspective Matching [1] using in [Quora
 
 ## Description
 
+`train_model.py` - train and test BiMPM model.
+
 `bimpm.py` - model graph.
 
 `multi_perspective.py` - multi perspective layer.
@@ -23,7 +25,7 @@ Keras implementation of Bilateral Multi-Perspective Matching [1] using in [Quora
 
 ## References
 
-[[1]](https://arxiv.org/pdf/1702.03814) Zhiguo Wang, Wael Hamza and Radu Florian. "Bilateral Multi-Perspective Matching for Natural Language Sentences," 13 February 2017.  Retrieved at https://arxiv.org/pdf/1702.03814.pdf on 14 February 2017.
+[[1]](https://arxiv.org/pdf/1702.03814) Zhiguo Wang, Wael Hamza and Radu Florian. "Bilateral Multi-Perspective Matching for Natural Language Sentences."
 
 
 

@@ -5,8 +5,7 @@ import os
 
 
 class DirConfig(object):
-    DEBUG = 1
-    LOCAL = 1
+    DEBUG = 0
     W2V_FILE = '../embeddings/GoogleNews-vectors-negative300.bin'
     GLOVE_FILE = '../embeddings/glove.840B.300d.txt'
     BASE_DIR = '../'

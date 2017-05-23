@@ -19,6 +19,7 @@ class MultiPerspective(Layer):
     def __init__(self, mp_dim, epsilon=1e-6, **kwargs):
         self.mp_dim = mp_dim
         self.epsilon = 1e-6
+        self.strategy = 4
         super(MultiPerspective, self).__init__(**kwargs)
 
     def build(self, input_shape):
@@ -27,12 +28,12 @@ class MultiPerspective(Layer):
         embedding_size = input_shape[-1] / 2
         # Create a trainable weight variable for this layer.
         # input_shape is bidirectional RNN input shape
-        # kernel shape (mp_dim * 2 * 4, embedding_size)
+        # kernel shape (mp_dim * 2 * self.strategy, embedding_size)
         self.kernel = self.add_weight((self.mp_dim,
-                                       embedding_size * 2 * 4),
-                                      name='kernel',
-                                      initializer='glorot_uniform',
-                                      trainable=True)
+                                       embedding_size * 2 * self.strategy),
+                                       name='kernel',
+                                       initializer='glorot_uniform',
+                                       trainable=True)
         self.kernel_full_fw = self.kernel[:, :embedding_size]
         self.kernel_full_bw = self.kernel[:, embedding_size: embedding_size * 2]
         self.kernel_attentive_fw = self.kernel[:, embedding_size * 2: embedding_size * 3]
@@ -47,7 +48,7 @@ class MultiPerspective(Layer):
     def compute_output_shape(self, input_shape):
         if isinstance(input_shape, list):
             input_shape = input_shape[0]
-        return (input_shape[0], input_shape[1], self.mp_dim * 2 * 4)
+        return (input_shape[0], input_shape[1], self.mp_dim * 2 * self.strategy)
 
     def get_config(self):
         config = {'mp_dim': self.mp_dim,
@@ -246,9 +247,9 @@ class MultiPerspective(Layer):
         h1 = self._time_distributed_multiply(h1, w)
         # h2_last_state * weights, (batch_size, mp_dim, embedding_size)
         h2 = self._time_distributed_multiply(h2_last_state, w)
-        # # reshape to (batch_size, 1, mp_dim, embedding_size)
+        # reshape to (batch_size, 1, mp_dim, embedding_size)
         h2 = K.expand_dims(h2, axis=1)
-        # # matching vector, (batch_size, h1_timesteps, mp_dim)
+        # matching vector, (batch_size, h1_timesteps, mp_dim)
         matching = self._cosine_similarity(h1, h2)
         return matching
 

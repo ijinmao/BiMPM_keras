@@ -15,77 +15,6 @@ import datetime
 import os
 
 
-# The function "text_to_wordlist" is from
-# https://www.kaggle.com/currie32/quora-question-pairs/the-importance-of-cleaning-text
-def text_to_wordlist(text, remove_stopwords=False, stem_words=False):
-    # Clean the text, with the option to remove stopwords and to stem words.
-    
-    # Convert words to lower case and split them
-    text = str(text).lower().split()
-
-    # Optionally, remove stop words
-    if remove_stopwords:
-        stops = set(stopwords.words("english"))
-        text = [w for w in text if not w in stops]
-    
-    text = " ".join(text)
-
-    # Clean the text
-    text = re.sub(r"[^A-Za-z0-9^,!.\/'+-=]", " ", text)
-    text = re.sub(r"what's", "what is ", text)
-    text = re.sub(r"\'s", " ", text)
-    text = re.sub(r"\'ve", " have ", text)
-    text = re.sub(r"can't", "cannot ", text)
-    text = re.sub(r"n't", " not ", text)
-    text = re.sub(r"i'm", "i am ", text)
-    text = re.sub(r"\'re", " are ", text)
-    text = re.sub(r"\'d", " would ", text)
-    text = re.sub(r"\'ll", " will ", text)
-    text = re.sub(r" e g ", " eg ", text)
-    text = re.sub(r" b g ", " bg ", text)
-    text = re.sub(r"e-mail", "email", text)
-    text = re.sub(r"imrovement", "improvement", text)
-    text = re.sub(r"intially", "initially", text)
-    text = re.sub(r"demonitization", "demonetization", text) 
-    text = re.sub(r"actived", "active", text)
-
-    text = re.sub(r",", " ", text)
-    text = re.sub(r"\.", " ", text)
-    text = re.sub(r"!", " ! ", text)
-    text = re.sub(r"\/", " ", text)
-    text = re.sub(r"\^", " ^ ", text)
-    text = re.sub(r"\+", " + ", text)
-    text = re.sub(r"\-", " - ", text)
-    text = re.sub(r"\=", " = ", text)
-    text = re.sub(r"'", " ", text)
-    text = re.sub(r"(\d+)(k)", r"\g<1>000", text)
-    text = re.sub(r":", " : ", text)
-    text = re.sub(r" u s ", " american ", text)
-    text = re.sub(r"\0s", "0", text)
-    text = re.sub(r" 9 11 ", " 911 ", text)
-    text = re.sub(r"e - mail", "email", text)
-    text = re.sub(r"j k", "jk", text)
-    text = re.sub(r"\s{2,}", " ", text)
-
-    # Optionally, shorten words to their stems
-    if stem_words:
-        text = text.split()
-        stemmer = SnowballStemmer('english')
-        stemmed_words = [stemmer.stem(word) for word in text]
-        text = " ".join(stemmed_words)
-    
-    # Return a list of words
-    return(text)
-
-
-def preprocess_texts(texts):
-    processed = []
-    for t in texts:
-        processed.append(text_to_wordlist(
-            t, remove_stopwords=TrainConfig.REMOVE_STOPWORDS, stem_words=TrainConfig.USE_STEM))
-    return processed
-
-
 def get_text_sequence():
     if os.path.isfile(DirConfig.CHAR1_CACHE_TRAIN):
         print('---- Load data from cache.')
@@ -148,28 +77,6 @@ def get_text_sequence():
         test_x2 = (test_x2, test_words2)
 
     return train_x1, train_x2, test_x1, test_x2, labels, test_ids, word_index, char_index
-
-
-def split_train_data(train_x1, train_x2, labels, train_index, val_index):
-    if TrainConfig.USE_CHAR:
-        train_w1 = train_x1[0][train_index]
-        train_w2 = train_x2[0][train_index]
-        train_c1 = train_x1[1][train_index]
-        train_c2 = train_x2[1][train_index]
-        train_data = [train_w1, train_w2, train_c1, train_c2]
-
-        val_w1 = train_x1[0][val_index]
-        val_w2 = train_x2[0][val_index]
-        val_c1 = train_x1[1][val_index]
-        val_c2 = train_x2[1][val_index]
-        val_data = [val_w1, val_w2, val_c1, val_c2]
-    else:
-        train_data = [train_x1[train_index], train_x2[train_index]]
-        val_data = [train_x1[val_index], train_x2[val_index]]
-
-    train_labels = labels[train_index]
-    val_labels = labels[val_index]
-    return train_data, train_labels, val_data, val_labels
 
 
 def get_word_seq(train_ori1, train_ori2, test_ori1, test_ori2):
@@ -253,6 +160,97 @@ def get_char_seq(train_ori1, train_ori2, test_ori1, test_ori2):
     np.save(open(DirConfig.CHAR2_CACHE_TEST, 'wb'), test_s2)
     np.save(open(DirConfig.CHAR_INDEX_CACHE, 'wb'), char_index)
     return train_s1, train_s2, test_s1, test_s2, char_index
+
+
+# The function "text_to_wordlist" is from
+# https://www.kaggle.com/currie32/quora-question-pairs/the-importance-of-cleaning-text
+def text_to_wordlist(text, remove_stopwords=False, stem_words=False):    
+    # Convert words to lower case and split them
+    text = str(text).lower().split()
+
+    # Optionally, remove stop words
+    if remove_stopwords:
+        stops = set(stopwords.words("english"))
+        text = [w for w in text if not w in stops]
+
+    text = " ".join(text)
+
+    # Clean the text
+    text = re.sub(r"[^A-Za-z0-9^,!.\/'+-=]", " ", text)
+    text = re.sub(r"what's", "what is ", text)
+    text = re.sub(r"\'s", " ", text)
+    text = re.sub(r"\'ve", " have ", text)
+    text = re.sub(r"can't", "cannot ", text)
+    text = re.sub(r"n't", " not ", text)
+    text = re.sub(r"i'm", "i am ", text)
+    text = re.sub(r"\'re", " are ", text)
+    text = re.sub(r"\'d", " would ", text)
+    text = re.sub(r"\'ll", " will ", text)
+    text = re.sub(r" e g ", " eg ", text)
+    text = re.sub(r" b g ", " bg ", text)
+    text = re.sub(r"e-mail", "email", text)
+    text = re.sub(r"imrovement", "improvement", text)
+    text = re.sub(r"intially", "initially", text)
+    text = re.sub(r"demonitization", "demonetization", text) 
+    text = re.sub(r"actived", "active", text)
+
+    text = re.sub(r",", " ", text)
+    text = re.sub(r"\.", " ", text)
+    text = re.sub(r"!", " ! ", text)
+    text = re.sub(r"\/", " ", text)
+    text = re.sub(r"\^", " ^ ", text)
+    text = re.sub(r"\+", " + ", text)
+    text = re.sub(r"\-", " - ", text)
+    text = re.sub(r"\=", " = ", text)
+    text = re.sub(r"'", " ", text)
+    text = re.sub(r"(\d+)(k)", r"\g<1>000", text)
+    text = re.sub(r":", " : ", text)
+    text = re.sub(r" u s ", " american ", text)
+    text = re.sub(r"\0s", "0", text)
+    text = re.sub(r" 9 11 ", " 911 ", text)
+    text = re.sub(r"e - mail", "email", text)
+    text = re.sub(r"j k", "jk", text)
+    text = re.sub(r"\s{2,}", " ", text)
+
+    # Optionally, shorten words to their stems
+    if stem_words:
+        text = text.split()
+        stemmer = SnowballStemmer('english')
+        stemmed_words = [stemmer.stem(word) for word in text]
+        text = " ".join(stemmed_words)
+
+    # Return a list of words
+    return(text)
+
+
+def preprocess_texts(texts):
+    processed = []
+    for t in texts:
+        processed.append(text_to_wordlist(
+            t, remove_stopwords=TrainConfig.REMOVE_STOPWORDS, stem_words=TrainConfig.USE_STEM))
+    return processed
+
+
+def split_train_data(train_x1, train_x2, labels, train_index, val_index):
+    if TrainConfig.USE_CHAR:
+        train_w1 = train_x1[0][train_index]
+        train_w2 = train_x2[0][train_index]
+        train_c1 = train_x1[1][train_index]
+        train_c2 = train_x2[1][train_index]
+        train_data = [train_w1, train_w2, train_c1, train_c2]
+
+        val_w1 = train_x1[0][val_index]
+        val_w2 = train_x2[0][val_index]
+        val_c1 = train_x1[1][val_index]
+        val_c2 = train_x2[1][val_index]
+        val_data = [val_w1, val_w2, val_c1, val_c2]
+    else:
+        train_data = [train_x1[train_index], train_x2[train_index]]
+        val_data = [train_x1[val_index], train_x2[val_index]]
+
+    train_labels = labels[train_index]
+    val_labels = labels[val_index]
+    return train_data, train_labels, val_data, val_labels
 
 
 def extract_words(sentences):
